@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        VULN-SCA-1: Eski Spring Boot parent sürümü.
+        2.5.6, içindeki bazı transitive bağımlılıklarda (Tomcat, Spring Framework)
+        bilinen CVE'ler barındırır. Aikido SCA taraması bunu yakalamalı.
+        FIX: en güncel/stable Spring Boot 3.x sürümüne (veya en azından son 2.7.x patch'ine) yükselt.
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.6</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.example</groupId>
+    <artifactId>vuln-spring-demo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>vuln-spring-demo</name>
+    <description>Aikido pratigi icin kasitli zafiyet barindiran demo proje - SADECE egitim amaclidir</description>
+
+    <properties>
+        <java.version>11</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--
+            VULN-SCA-2: Log4Shell (CVE-2021-44228).
+            log4j-core 2.14.1 bu meshur RCE acigina sahiptir.
+            FIX: 2.17.1+ surumune yukselt (veya log4j2'yi tamamen kaldirip
+            spring-boot-starter-logging'in varsayilan logback'ini kullan).
+        -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.14.1</version>
+        </dependency>
+
+        <!--
+            VULN-SCA-3: Deserialization aciği (CVE-2015-7501).
+            commons-collections 3.2.1, gadget chain ile uzaktan kod calistirmaya
+            acik bilinen bir surumdur.
+            FIX: 3.2.2+ surumune yukselt.
+        -->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
