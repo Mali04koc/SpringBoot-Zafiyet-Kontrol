@@ -65,8 +65,12 @@ public class UserController {
      */
     @GetMapping("/file")
     public String readUserFile(@RequestParam String filename) throws IOException {
-        Path path = Paths.get(UPLOAD_DIR, filename);
-        return new String(Files.readAllBytes(path));
+        Path basePath = Paths.get(UPLOAD_DIR).toAbsolutePath().normalize();
+        Path targetPath=basePath.resolve(filename).normalize();
+
+        if(!targetPath.startsWith(basePath)){
+            throw new SecurityException("Güvenlik İhlali: Dizin dışına çıkamazsın")
+        }
     }
 
     /*
