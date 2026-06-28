@@ -25,6 +25,8 @@
 
     <properties>
         <java.version>11</java.version>
+        <org-apache-tomcat-embed.tomcat-embed-core.version>9.0.118</org-apache-tomcat-embed.tomcat-embed-core.version>
+        <org-apache-tomcat-embed.tomcat-embed-websocket.version>9.0.118</org-apache-tomcat-embed.tomcat-embed-websocket.version>
     </properties>
 
     <dependencies>
@@ -81,4 +83,18 @@
             </plugin>
         </plugins>
     </build>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${org-apache-tomcat-embed.tomcat-embed-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-websocket</artifactId>
+                <version>${org-apache-tomcat-embed.tomcat-embed-websocket.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
