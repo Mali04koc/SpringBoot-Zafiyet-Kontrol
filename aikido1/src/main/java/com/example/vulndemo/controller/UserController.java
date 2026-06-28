@@ -85,7 +85,36 @@ public class UserController {
      */
     @PostMapping("/ping")
     public String pingHost(@RequestParam String host) throws IOException {
+
+        /*
+
+        HATALI: KULLANICIDAN ALDIĞIMIZ HOST BİLGİSİNİ DİREKT EKRANA BASMAMAK LAZIM , BİR HACKER ORAYA ERİ-
+        ŞİP ZARARLI BİR YAZILIMI UYGULAYABİLİR
+
+
         Process process = Runtime.getRuntime().exec("ping -c 1 " + host);
         return "Ping komutu calistirildi: " + host + " (exit kontrolu yapilmadi)";
+
+       */
+       try {
+           // Javanın güvenli ağ kütüphanesine yazıyoruz direkt terminale değil
+           InetAdress inet = InetAddress.getByName(host);
+           boolean isReachable = inet.isReachable(2000); // 2 sn timeoutla ping atabiliyor muyuz
+
+           // kullanıcıdan gelen <> gibi script karakterlerini zararsız html varlıklarına dönüştürüyoruz
+           String safehost=HtmlUtils.htmlEscape(host);
+
+           if(isReachable){ return "Ping basarili" + safehost}
+           else { return "Ping basarisiz" + safehost}
+       } catch (java.lang.Exception e) {
+           return "Gecersiz host" + HtmlUtils.htmlEscape(host);
+       }
+
+
+
+
+
+
     }
+
 }
