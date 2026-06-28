@@ -50,8 +50,8 @@ public class UserController {
      */
     @GetMapping("/search")
     public List<Map<String, Object>> searchUsers(@RequestParam String name) {
-        String sql = "SELECT id, username, email FROM user WHERE username = '" + name + "'";
-        return jdbcTemplate.queryForList(sql);
+        String sql = "SELECT id, username, email FROM user WHERE username = ?";
+        return jdbcTemplate.queryForList(sql,name);
     }
 
     /*
